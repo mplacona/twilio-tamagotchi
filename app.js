@@ -1,74 +1,78 @@
 var Hapi = require('hapi');
-var Tamagotchi = require('./tamagotchi.js');
 var util = require('util');
+var config = require('./config');
+var Tamagotchi = require('./tamagotchi');
+var message = require('./message')
 
 // Create a server with a host and port
 var server = new Hapi.Server();
-server.connection({ 
-    host: 'localhost', 
-    port: 8000 
+server.connection({
+  host: 'localhost',
+  port: config.port
 });
 
-var tamagotchi;
-var pet = Array("hangman", "tic-tac-toe", "human knot", "london bridges", "frog races", "water balloon fights", "silly relay races");
-var food = Array("apple", "cheetos", "burrito", "letuce", "pear", "ice cream");
+var tamagotchi,
+  pet = config.actions.pet,
+  food = config.actions.food;
 
 server.route({
-    method: 'POST',
-    path: '/interact',
-    handler: function(request, reply){
-        var action = request.payload.body;
-        var status;
+  method: 'POST',
+  path: '/interact',
+  handler: function(request, reply) {
+    var action = request.payload.Body;
+    var status;
 
-        // check whether our pet has already been created
-        if(!(tamagotchi instanceof Tamagotchi)){
-            // we will create one then
-            tamagotchi = new Tamagotchi(action);
-            status = util.format('Hello, my name is %s and I was just born. Do you wanna play?', action);
-        }else{
-            // check if our pet is awake
-            if(!tamagotchi.awake && action != "wake"){
-                status = util.format('%s is asleep now', tamagotchi.name);
-            }
-            else{
-                // let's check which action the user is going for
-                switch(action){
-                    case("play"):
-                        status = tamagotchi.play(pet[Math.floor(Math.random()*pet.length)]);
-                        break;
-                    case("feed"):
-                        status = tamagotchi.feed(food[Math.floor(Math.random()*food.length)]);
-                        break;
-                    case("wake"):
-                        status = tamagotchi.wake();
-                        break;
-                    case("sleep"):
-                        status = tamagotchi.sleep();
-                        break;
-                    case("poop"):
-                        status = tamagotchi.poop();
-                        break;
-                    case("age"):
-                        status = tamagotchi.checkAge();
-                        break;
-                    case("hunger"):
-                        status = tamagotchi.checkHunger();
-                        break;
-                    case("happy"):
-                        status = tamagotchi.checkHappiness();
-                        break;
-                    default:
-                        status = "Actions: feed, pet, wake, poo\nStatus: age, hunger, happy";
-                }
-            }
+    // check whether our pet has already been created
+    if (!(tamagotchi instanceof Tamagotchi)) {
+      // we will create one then
+      tamagotchi = new Tamagotchi(action, pet, food);
+      status = util.format('Hello, my name is %s and I was just born. Do you wanna play?', action);
+    } else {
+      // check if our pet is awake
+      if (!tamagotchi.awake && action.toLowerCase() != "wake") {
+        status = util.format('%s is asleep now', tamagotchi.name);
+      } else {
+        // let's check which action the user is going for
+        switch (action.toLowerCase()) {
+          case ("play"):
+            status = tamagotchi.play();
+            break;
+          case ("feed"):
+            status = tamagotchi.feed();
+            break;
+          case ("wake"):
+            status = tamagotchi.wake();
+            break;
+          case ("sleep"):
+            status = tamagotchi.sleep();
+            break;
+          case ("poo"):
+            status = tamagotchi.poop();
+            break;
+          case ("age"):
+            status = tamagotchi.checkAge();
+            break;
+          case ("hungry"):
+            status = tamagotchi.checkHunger();
+            break;
+          case ("happy"):
+            status = tamagotchi.checkHappiness();
+            break;
+          default:
+            status = "Actions: play, feed, sleep, wake, poo\nStatus: age, hungry, happy";
         }
-        console.log(status)
-        tamagotchi.aiSimulate();
-        reply(status);
+      }
     }
+    var aiSimulation = tamagotchi.aiSimulate();
+    console.log(status);
+    message.send(status);
+    reply(status);
+  }
 });
 
 // Start the server
-server.start(function(){
-    console.log('What are you gonna name your pet?')
+server.start(function() {
+  var start = 'What are you gonna name your pet?';
+  console.log(start);
+  message.send(start);
 });
