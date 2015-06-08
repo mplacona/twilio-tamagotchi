@@ -7,7 +7,7 @@ var message = require('./message')
 // Create a server with a host and port
 var server = new Hapi.Server();
 server.connection({
-  host: 'localhost',
+  host: '0.0.0.0',
   port: config.port
 });
 
