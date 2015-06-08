@@ -1,0 +1,20 @@
+{
+  "name": "Twilio Tamagotchi",
+  "description": "A Twilio powered Tamagotchi",
+  "website": "https://github.com/mplacona/twilio-tamagotchi",
+  "logo": "https://s3.amazonaws.com/howtodocs/twilio-logo.png",
+  "env": {
+    "TWILIO_ACCOUNT_SID": {
+            "description": "API username - find your account SID at https://www.twilio.com/user/account/voice-messaging"
+    },
+    "TWILIO_AUTH_TOKEN": {
+            "description": "API password - find your auth token at https://www.twilio.com/user/account/voice-messaging" 
+    },
+     "TWILIO_NUMBER": {
+            "description": "The number used by the aplication" 
+    },
+    "TELEPHONE_NUMBER": {
+            "description": "Your telephone number. Twilio Tamagotchi will always communicate with this one"
+    }
+  }
+}
