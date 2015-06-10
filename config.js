@@ -12,6 +12,8 @@ config.myNumber = process.env.MY_NUMBER;
 // A good practice is to store these string values as system environment variables, and load them from there as we are doing below. 
 // Alternately, you could hard code these values here as strings.
 config.twilioConfig = {
+    // You can get your AccountSid and AuthToken from https://www.twilio.com/user/account/voice
+    // Make sure you expand the Show API Credentials
     accountSid: process.env.TWILIO_ACCOUNT_SID,
     authToken: process.env.TWILIO_AUTH_TOKEN,
     // A Twilio number you control - choose one from:

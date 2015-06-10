@@ -1,5 +1,5 @@
 var util = require('util');
-var message = require('./message')
+var message = require('./message');
 
 var Tamagotchi = function(name, pet, food) {
     this.name = name;
@@ -10,9 +10,9 @@ var Tamagotchi = function(name, pet, food) {
     this.happy = 3;
     this.poo = 0;
     this.age = 0;
-  }
-  // ACTIONS
+}
 
+// ACTIONS
 Tamagotchi.prototype.play = function() {
   // A pet usually get's happy and hungry after playing a game
   this.hunger++;
@@ -61,14 +61,13 @@ Tamagotchi.prototype.getSad = function() {
 };
 
 Tamagotchi.prototype.aging = function() {
-  // Every one get a little bit sad when they get older.
+  // Everyone gets a little bit sad when they get older.
   this.age++;
   this.getSad();
   return util.format("%s is now one year older", this.name);
 };
 
 // STATUS
-
 Tamagotchi.prototype.checkAge = function() {
   return util.format("%s age: %d", this.name, this.age);
 };

@@ -2,8 +2,7 @@ var Hapi = require('hapi');
 var util = require('util');
 var config = require('./config');
 var Tamagotchi = require('./tamagotchi');
-var message = require('./message')
-var twilio = require('twilio');
+var message = require('./message');
 
 // Create a server with a host and port
 var server = new Hapi.Server();
