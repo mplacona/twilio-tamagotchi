@@ -3,11 +3,12 @@ var util = require('util');
 var config = require('./config');
 var Tamagotchi = require('./tamagotchi');
 var message = require('./message')
+var twilio = require('twilio');
 
 // Create a server with a host and port
 var server = new Hapi.Server();
 server.connection({
-  host: '0.0.0.0',
+  host: 'localhost',
   port: config.port
 });
 
@@ -23,12 +24,12 @@ server.route({
     var status;
 
     // check whether our pet has already been created
-    if (!(tamagotchi instanceof Tamagotchi)) {
-      // we will create one then
+    if (tamagotchi == undefined) {
+      // if our tamagotchi still hasn't been created we will create one
       tamagotchi = new Tamagotchi(action, pet, food);
       status = util.format('Hello, my name is %s and I was just born. Do you wanna play?', action);
     } else {
-      // check if our pet is awake
+      // check if our pet is awake, we don't want to wake it up
       if (!tamagotchi.awake && action.toLowerCase() != "wake") {
         status = util.format('%s is asleep now', tamagotchi.name);
       } else {
@@ -65,8 +66,7 @@ server.route({
     }
     var aiSimulation = tamagotchi.aiSimulate();
     console.log(status);
-    message.send(status);
-    reply(status);
+    reply(message.twiml(status));
   }
 });
 
