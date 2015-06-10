@@ -13,7 +13,7 @@
      "TWILIO_NUMBER": {
             "description": "The number used by the aplication" 
     },
-    "TELEPHONE_NUMBER": {
+    "MY_NUMBER": {
             "description": "Your telephone number. Twilio Tamagotchi will always communicate with this one"
     }
   }
